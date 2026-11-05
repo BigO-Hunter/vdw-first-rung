@@ -23,7 +23,10 @@ cast to ℝ — no floating point anywhere.
 
 ## Status
 
-- **Verdict: GREEN 6/6** (`bash verify.sh`)
+- **Verdict: GREEN 6/6** (`bash verify.sh`) — captured run, with commit, Lean
+  version and the exact stdout, in **`VERIFICATION.md`**. That receipt was taken
+  on a warm `.lake` (cached Mathlib oleans, project modules replayed) with the
+  `Submission` root force-recompiled; it is not a cold-clone build.
 - **Axioms** (`#print axioms`, bare import, `autoImplicit=false` replay):
   ```
   'BigOSpeedrun.VanDerWaerden.bound_baseline' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -69,6 +72,10 @@ bash verify.sh                 # 6-check immunization harness → GREEN 6/6
 `verify.sh` checks: (1) `lake build` green; (2) zero `sorry`; (3) axioms exactly
 `{propext, Classical.choice, Quot.sound}`; (4) `autoImplicit=false` clean;
 (5) statement byte-exact vs corpus sha256; (6) bare-import audit (no `open`).
+
+The recorded output of that command — stdout, exit status, commit, toolchain and
+what was actually recompiled — is committed as `VERIFICATION.md`. There is no
+CI; that file is the evidence, and it is a point-in-time capture.
 
 ## Scope and the ladder
 

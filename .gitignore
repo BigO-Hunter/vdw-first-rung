@@ -1,0 +1,3 @@
+.lake/
+logs_*.txt
+*.tar.gz

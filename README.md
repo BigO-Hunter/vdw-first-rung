@@ -1,0 +1,84 @@
+# Quantitative van der Waerden — first Lean-Verified rung (c = 1/100000)
+
+Kernel-checked Lean 4 proof of the first rung of the quantitative van der Waerden
+ladder, exactly as proved by OpenAI's `openai/math` corpus:
+
+```lean
+theorem uniform_lower_bound :
+    ∃ K : ℕ, ∀ k ≥ K, ∀ r ≥ 2,
+      (k : ℝ) ^ ((1 / 100000 : ℝ) * k * (Nat.log 2 r : ℝ)) < (W r k : ℝ)
+```
+
+i.e. **W_r(k) > k^(k·⌊log₂ r⌋/100000)** uniformly over all color counts r ≥ 2, for all
+large k. The submission entry is:
+
+```lean
+theorem Race.bound : BigOSpeedrun.VanDerWaerden.Bound ((1 : ℚ) / 100000) :=
+  BigOSpeedrun.VanDerWaerden.bound_baseline
+```
+
+with `Bound c` the corpus statement carrying a free exact-rational constant `c`
+(larger is better). The constant enters as the exact rational `(1 : ℚ) / 100000`
+cast to ℝ — no floating point anywhere.
+
+## Status
+
+- **Verdict: GREEN 6/6** (`bash verify.sh`)
+- **Axioms** (`#print axioms`, bare import, `autoImplicit=false` replay):
+  ```
+  'BigOSpeedrun.VanDerWaerden.bound_baseline' depends on axioms: [propext, Classical.choice, Quot.sound]
+  ```
+  No `sorryAx`, no project-specific axioms. Zero `sorry` in the glue and the entire
+  vendored tree.
+- **Statement byte-exactness**: `challenges/van-der-waerden/Statement.lean` is
+  byte-identical (sha256 `1caa563bbf7a5602adb8cdbbc06aaf1e3d4d5fe27ed4bebf2bf44cf2937a6593`)
+  to `lean/ComparatorChallenges/QuantitativeVanDerWaerden.lean` in openai/math at
+  commit `1581d4cbdd69a0faf34b2089614fe2a814316a6a` — including that file's `sorry`,
+  which is OpenAI's *challenge placeholder* (the claim), not an assumed proof.
+
+## Attribution
+
+- **Mathematics and formalization**: OpenAI, `openai/math`
+  (https://github.com/openai/math, Apache-2.0), commit
+  `1581d4cbdd69a0faf34b2089614fe2a814316a6a`. The proof is an **assembly of the
+  cataloged, sorry-free corpus solution**
+  `lean/OAI/Combinatorics/ProgressionColoring/` (117 files), closing at
+  `OAI.QuantitativeVanDerWaerden.uniform_lower_bound`
+  (`exact uniform_lower_of_cyclicLowerBound exists_cyclic_coloring`). Full credit
+  to the openai/math authors for the construction and its formalization.
+- **Target adapter + 6-check harness**: `darkhipo/van-der-waerden` (MultiAgency
+  swarm, Apache-2.0) at commit `60ef7e6` — the `BigOSpeedrun.VanDerWaerden.Bound`
+  c-parameter adapter, the frozen statement folder, and the immunization harness.
+- **This repo**: publication of the baseline (c = 1/100000) first rung as its own
+  immutable package, with repository line endings normalized (CRLF → LF; content
+  unchanged, byte-exactness restored against the corpus).
+
+## Exact build commands
+
+Pins: Lean `leanprover/lean4:v4.34.1`, Mathlib `d13f23b723b8a846827a245b89c10fc7d3f11612`
+(`lean-toolchain`, `lakefile.toml`, `lake-manifest.json`).
+
+```bash
+lake build                     # Build completed successfully (9041 jobs).
+lake env lean -DautoImplicit=false AxiomCheck.lean
+# 'BigOSpeedrun.VanDerWaerden.bound_baseline' depends on axioms:
+#   [propext, Classical.choice, Quot.sound]
+bash verify.sh                 # 6-check immunization harness → GREEN 6/6
+```
+
+`verify.sh` checks: (1) `lake build` green; (2) zero `sorry`; (3) axioms exactly
+`{propext, Classical.choice, Quot.sound}`; (4) `autoImplicit=false` clean;
+(5) statement byte-exact vs corpus sha256; (6) bare-import audit (no `open`).
+
+## Scope and the ladder
+
+This is the **first-Verified stepping stone**: the weakest attained rung, published
+to establish a Verified baseline row. The method supports stronger attained
+constants by re-tuning the corpus construction parameter (see
+`challenges/van-der-waerden/README.md` and the margin note in the adapter lineage).
+Stronger *claimed* ladders (e.g. a 1/9 ladder) are **not** included here — they are
+conditional and not Lean-verified. Nothing in this repo depends on them.
+
+## License
+
+Apache-2.0 (matching openai/math and the adapter lineage).

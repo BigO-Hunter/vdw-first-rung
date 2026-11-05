@@ -1,0 +1,22 @@
+name = "vdw"
+defaultTargets = ["Submission"]
+
+# van-der-waerden submission package (R2125608329, 2026-11-04).
+# Pinned per bigospeedrun/verifier profiles/lake-manifest.json (the DFT pin):
+# toolchain leanprover/lean4:v4.34.1, Mathlib d13f23b723b8a846827a245b89c10fc7d3f11612.
+# The verifier ignores submitted Lake files; these exist so the package builds
+# locally against the exact pins. Proof = assembly of the cataloged, sorry-free
+# openai/math ProgressionColoring solution (Apache-2.0), vendored under Submission/.
+
+[[require]]
+name = "Mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "d13f23b723b8a846827a245b89c10fc7d3f11612"
+
+# Every module of the solution lives under Submission/ (maintainer contract,
+# targets.md): the vendored corpus tree, the Bound adapter, and the bridge.
+# Submodules-only glob (house pattern: a one-glob member with cross-lib imports
+# trips Lake's lib-level import check).
+[[lean_lib]]
+name = "Submission"
+globs = ["Submission", "Submission.+"]

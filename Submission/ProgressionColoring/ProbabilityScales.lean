@@ -30,13 +30,13 @@ theorem log_two_le_power_log {k : ℕ} (hk : 2 ≤ k) {a : ℝ} (ha : 0 ≤ a) :
 
 /-- The exact exponent appearing in the rich-progression union bound. -/
 def richEnvelope (k : ℕ) : ℝ :=
-  Real.exp (-(21 / 200000 : ℝ) * k * Real.log k +
+  Real.exp (-(1 / 40000 : ℝ) * k * Real.log k +
     2 * dimension k * Real.log (2 * (k : ℝ) ^ 2) + Real.log 2)
 
 theorem richEnvelope_tendsto : Tendsto richEnvelope atTop (𝓝 0) := by
   have hb : ∀ᶠ k : ℕ in atTop, richEnvelope k ≤
       Real.exp (13 * (k : ℝ) ^ (1 / 10 : ℝ) * Real.log k -
-        (21 / 200000 : ℝ) * (k : ℝ) ^ (1 : ℝ)) := by
+        (1 / 40000 : ℝ) * (k : ℝ) ^ (1 : ℝ)) := by
     have hl := (Real.tendsto_log_atTop.comp
       (tendsto_natCast_atTop_atTop : Tendsto (fun k : ℕ => (k : ℝ)) atTop atTop)).eventually
       (eventually_ge_atTop (1 : ℝ))

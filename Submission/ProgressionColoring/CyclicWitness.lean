@@ -47,7 +47,7 @@ theorem construction_key_fiber_card_le_four {k : ℕ} (s : ConstructionModel.Dat
 actual rich-or-affine dichotomy, then samples only the finite geometric-key image. -/
 theorem eventually_cyclic_coloring :
     ∀ᶠ k : ℕ in atTop, ∃ N : ℕ, 2 ≤ N ∧
-      (k : ℝ) ^ ((1 / 100000 : ℝ) * k) ≤ (N : ℝ) ∧
+      (k : ℝ) ^ ((1 / 20000 : ℝ) * k) ≤ (N : ℝ) ∧
         ∃ C : ZMod N → Bool, CyclicAvoids C k := by
   filter_upwards [ConstructionModel.eventually_outerChoice, eventually_basicScales,
     eventually_geometryScales, ConstructionModel.eventually_outerChoice_sparse_budget]
@@ -105,7 +105,7 @@ theorem eventually_cyclic_coloring :
 
 theorem exists_cyclic_coloring :
     ∃ K : ℕ, ∀ k ≥ K, ∃ N : ℕ, 2 ≤ N ∧
-      (k : ℝ) ^ ((1 / 100000 : ℝ) * k) ≤ (N : ℝ) ∧
+      (k : ℝ) ^ ((1 / 20000 : ℝ) * k) ≤ (N : ℝ) ∧
         ∃ C : ZMod N → Bool, CyclicAvoids C k :=
   eventually_atTop.1 eventually_cyclic_coloring
 

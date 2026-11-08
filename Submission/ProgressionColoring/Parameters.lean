@@ -11,7 +11,7 @@ noncomputable section
 
 namespace QuantitativeVanDerWaerden.Parameters
 
-def c : ℝ := 1 / 100000
+def c : ℝ := 1 / 20000
 def dimension (k : ℕ) : ℕ := ⌈(k : ℝ) ^ (1 / 10 : ℝ)⌉₊
 def cutoff (k : ℕ) : ℕ := ⌈(k : ℝ) ^ (1 / 2 : ℝ)⌉₊
 def flipProbability (k : ℕ) : ℝ := (k : ℝ) ^ (-1 / 20 : ℝ)
@@ -21,7 +21,7 @@ def cutScale (k : ℕ) : ℝ := 1 / (1000 * (dimension k : ℝ))
 theorem c_pos : 0 < c := by norm_num [c]
 
 theorem rich_coefficient :
-    2 * c - (1 / 100 : ℝ) / 80 = -(21 / 200000 : ℝ) := by
+    2 * c - (1 / 100 : ℝ) / 80 = -(1 / 40000 : ℝ) := by
   norm_num [c]
 
 theorem dimension_lower (k : ℕ) :

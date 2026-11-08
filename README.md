@@ -1,25 +1,37 @@
-# Quantitative van der Waerden — first Lean-Verified rung (c = 1/100000)
+# Quantitative van der Waerden — Lean-Verified rung 2 (c = 1/20000)
 
-Kernel-checked Lean 4 proof of the first rung of the quantitative van der Waerden
-ladder, exactly as proved by OpenAI's `openai/math` corpus:
+Kernel-checked Lean 4 proof of the second rung of the quantitative van der Waerden
+ladder: the OpenAI `openai/math` corpus machinery with the exponent constant
+retuned from the corpus's displayed `1/100000` to **`1/20000`** (5× the baseline):
 
 ```lean
 theorem uniform_lower_bound :
     ∃ K : ℕ, ∀ k ≥ K, ∀ r ≥ 2,
-      (k : ℝ) ^ ((1 / 100000 : ℝ) * k * (Nat.log 2 r : ℝ)) < (W r k : ℝ)
+      (k : ℝ) ^ ((1 / 20000 : ℝ) * k * (Nat.log 2 r : ℝ)) < (W r k : ℝ)
 ```
 
-i.e. **W_r(k) > k^(k·⌊log₂ r⌋/100000)** uniformly over all color counts r ≥ 2, for all
+i.e. **W_r(k) > k^(k·⌊log₂ r⌋/20000)** uniformly over all color counts r ≥ 2, for all
 large k. The submission entry is:
 
 ```lean
-theorem Race.bound : BigOSpeedrun.VanDerWaerden.Bound ((1 : ℚ) / 100000) :=
+theorem Race.bound : BigOSpeedrun.VanDerWaerden.Bound ((1 : ℚ) / 20000) :=
   BigOSpeedrun.VanDerWaerden.bound_baseline
 ```
 
 with `Bound c` the corpus statement carrying a free exact-rational constant `c`
-(larger is better). The constant enters as the exact rational `(1 : ℚ) / 100000`
+(larger is better). The constant enters as the exact rational `(1 : ℚ) / 20000`
 cast to ℝ — no floating point anywhere.
+
+**Where the improvement comes from.** Every structural parameter of the corpus
+construction (dimension `k^(1/10)`, cutoff `k^(1/2)`, flip probability `k^(-1/20)`,
+mesh, cut scale) is unchanged. The coefficient is pinned by exactly one numeric
+budget: the rich-progression union bound needs `2c < 1/8000` (i.e. `c < 1/16000`),
+with the envelope constant `1/8000 − 2c`. The corpus pinned `c = 1/100000`
+(envelope `21/200000`); rung 2 pins `c = 1/20000` (envelope `1/40000`, margin
+`1/40000` before the `O(k^(1/10)·log k)` correction terms). The retune touches
+only `Parameters.c`, the envelope constant in `ProbabilityScales`/
+`PerturbationScales`, and the literal instantiations in `Main`/`CyclicWitness`
+(21 changed lines; the full diff against rung-1 is the retune, nothing else).
 
 ## Status
 
@@ -79,12 +91,16 @@ CI; that file is the evidence, and it is a point-in-time capture.
 
 ## Scope and the ladder
 
-This is the **first-Verified stepping stone**: the weakest attained rung, published
-to establish a Verified baseline row. The method supports stronger attained
-constants by re-tuning the corpus construction parameter (see
-`challenges/van-der-waerden/README.md` and the margin note in the adapter lineage).
-Stronger *claimed* ladders (e.g. a 1/9 ladder) are **not** included here — they are
-conditional and not Lean-verified. Nothing in this repo depends on them.
+This branch carries **rung 2**: the weakest Verified constant strictly better than
+the corpus baseline, obtained by pure retuning of the already-kernel-checked
+machinery (no new mathematics). The lean-admissible ceiling of this retune family
+is `c < 1/16000`; rung 2 sits at `1/20000` with a strict margin. Going past
+`1/16000` requires modifying the budget step itself (e.g. the conditional
+"shorter dilation" modification of the DaysSky refinement), which is **not**
+formalized anywhere. Stronger *claimed* ladders (DaysSky's conditional `c = 1/9`,
+region `c < 1/8`) are **not** included here — their structural lemmas are
+prose-only and their own status line disclaims formal verification. Nothing in
+this repo depends on them.
 
 ## License
 

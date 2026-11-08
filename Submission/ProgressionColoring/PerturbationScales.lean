@@ -66,7 +66,7 @@ theorem real_rich_risk_le {k q : ℕ} (hk : 2 ≤ k) (hq : 0 < q)
         Real.log_mul (by norm_num) hqpow.ne', Real.log_pow, Real.log_rpow hp]
       rw [flipProbability, Real.log_rpow hk0]
       simp only [Nat.cast_mul, Nat.cast_ofNat]
-      change _ ≤ -(21 / 200000 : ℝ) * k * Real.log k +
+      change _ ≤ -(1 / 40000 : ℝ) * k * Real.log k +
         2 * dimension k * Real.log (2 * (k : ℝ) ^ 2) + Real.log 2
       dsimp [c] at hlogq
       nlinarith

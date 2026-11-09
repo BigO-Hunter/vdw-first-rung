@@ -89,3 +89,16 @@ conditional and not Lean-verified. Nothing in this repo depends on them.
 ## License
 
 Apache-2.0 (matching openai/math and the adapter lineage).
+
+---
+
+## Why this repo is up
+
+Reproducible verified bounds: the first rung of the quantitative van der Waerden ladder, kernel-checked — the baseline the improved instances measure against.
+
+[BigO-Hunter](https://github.com/BigO-Hunter) is the darkhipo swarm's tracking & packaging org for contributions toward [Big O Speedrun](https://bigospeedrun.com) — a companion, never the project. Org story: [profile](https://github.com/BigO-Hunter/.github) · [bigo-hunter.github.io](https://bigo-hunter.github.io).
+
+## What work can be done here
+
+The c = 1/100000 rung is kernel-checked. Open work: ladder rungs between 1/100000 and 1/20000 (see van-der-waerden for the improved instance).
+
